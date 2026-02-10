@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inbox</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .user-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .user-card:hover { background-color: #f9f9f9; }
+        a { text-decoration: none; color: black; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+    <a href="{% url 'feed' %}" style="display: inline-block; margin-bottom: 20px; color: #0095f6;">← Back to Feed</a>
+    <h1>Your Messages</h1>
+
+    {% for user in conversations %}
+        <div class="user-card">
+            <a href="{% url 'chat_room' user.username %}">
+                <strong>@{{ user.username }}</strong>
+                <span style="color: blue;">Open Chat →</span>
+            </a>
+        </div>
+    {% empty %}
+        <p>You haven't messaged anyone yet.</p>
+        <a href="{% url 'search' %}">Search for users to chat with</a>
+    {% endfor %}
+</body>
+</html>

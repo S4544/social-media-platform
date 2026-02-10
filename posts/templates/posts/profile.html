@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ profile_user.username }}'s Profile</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; text-align: center; }
+        .profile-header { padding: 20px; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
+        .profile-pic { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #0095f6; margin-bottom: 10px; }
+        .placeholder-pic { width: 120px; height: 120px; border-radius: 50%; background: #ddd; display: inline-block; line-height: 120px; color: #555; font-size: 2em; }
+        .stats { display: flex; justify-content: center; gap: 30px; margin: 15px 0; font-size: 1.1em; }
+        .stat-box strong { display: block; font-size: 1.3em; color: #333; }
+        .btn-follow { background: #0095f6; color: white; border: none; padding: 8px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        .btn-unfollow { background: #dbdbdb; color: black; border: none; padding: 8px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        .btn-message { background: #efefef; color: black; text-decoration: none; padding: 8px 15px; border-radius: 5px; margin-left: 10px; font-weight: bold; border: 1px solid #ccc; }
+        .post { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; border-radius: 8px; text-align: left; }
+        img.post-img { max-width: 100%; height: auto; margin-top: 10px; border-radius: 5px; }
+        a { text-decoration: none; color: #0095f6; }
+    </style>
+</head>
+<body>
+    <div style="text-align: left; margin-bottom: 10px;">
+        <a href="{% url 'feed' %}">← Back to Feed</a>
+    </div>
+
+    <div class="profile-header">
+        {% if profile_user.profile.profile_image %}
+            <img src="{{ profile_user.profile.profile_image.url }}" class="profile-pic">
+        {% else %}
+            <div class="placeholder-pic">👤</div>
+        {% endif %}
+
+        <h1>@{{ profile_user.username }}</h1>
+
+        {% if request.user == profile_user %}
+            <form method="POST" enctype="multipart/form-data" style="margin-bottom: 15px;">
+                {% csrf_token %}
+                <input type="file" name="profile_image" accept="image/*" required>
+                <button type="submit" style="font-size: 0.8em;">Update Photo</button>
+            </form>
+        {% endif %}
+
+        <div class="stats">
+            <div class="stat-box"><strong>{{ post_count }}</strong> Posts</div>
+            <div class="stat-box"><strong>{{ followers_count }}</strong> Followers</div>
+            <div class="stat-box"><strong>{{ following_count }}</strong> Following</div>
+        </div>
+
+        {% if request.user != profile_user %}
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <form method="POST">
+                    {% csrf_token %}
+                    {% if is_following %}
+                        <button type="submit" name="follow" value="unfollow" class="btn-unfollow">Unfollow</button>
+                    {% else %}
+                        <button type="submit" name="follow" value="follow" class="btn-follow">Follow</button>
+                    {% endif %}
+                </form>
+                
+                <a href="{% url 'chat_room' profile_user.username %}" class="btn-message">💬 Message</a>
+            </div>
+        {% endif %}
+    </div>
+
+    {% for post in posts %}
+        <div class="post">
+            <strong>@{{ post.author.username }}</strong>
+            <span style="color: #777; font-size: 0.8em;">{{ post.created_at|date:"M d" }}</span>
+            <p>{{ post.content }}</p>
+            {% if post.image %}
+                <img src="{{ post.image.url }}" class="post-img">
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No posts yet.</p>
+    {% endfor %}
+</body>
+</html>

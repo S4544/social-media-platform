@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .user-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        a { text-decoration: none; color: #0095f6; font-weight: bold; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #555; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <a href="{% url 'feed' %}" class="back-btn">← Back to Feed</a>
+
+    <h1>Search Results for "{{ query }}"</h1>
+
+    {% if results %}
+        {% for user in results %}
+            <div class="user-card">
+                <span>@{{ user.username }}</span>
+                <a href="{% url 'profile' user.username %}">View Profile</a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No users found.</p>
+    {% endif %}
+</body>
+</html>

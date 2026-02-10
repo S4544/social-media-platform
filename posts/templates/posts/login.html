@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Log In</title>
+    <style>
+        body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; width: 100%; cursor: pointer; margin-top: 10px; }
+        input { width: 100%; padding: 8px; margin: 5px 0; box-sizing: border-box; }
+        label { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>Log In</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label>Username:</label>
+            <input type="text" name="username" required>
+        </p>
+        <p>
+            <label>Password:</label>
+            <input type="password" name="password" required>
+        </p>
+        <button type="submit">Log In</button>
+    </form>
+    <p style="margin-top: 15px;">
+        Don't have an account? <a href="{% url 'register' %}">Sign up here</a>
+    </p>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with {{ other_user.username }}</title>
+    <meta http-equiv="refresh" content="3">
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f0f2f5; }
+        .chat-container { height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; background: white; border-radius: 8px; margin-bottom: 20px; display: flex; flex-direction: column; }
+        .message { padding: 8px 15px; margin-bottom: 10px; border-radius: 20px; max-width: 70%; width: fit-content; word-wrap: break-word; }
+        .sent { background-color: #0084ff; color: white; align-self: flex-end; text-align: right; }
+        .received { background-color: #e4e6eb; color: black; align-self: flex-start; }
+        .date { font-size: 0.6em; opacity: 0.7; display: block; margin-top: 5px; }
+        form { display: flex; gap: 10px; }
+        input { flex-grow: 1; padding: 12px; border-radius: 20px; border: 1px solid #ccc; outline: none; }
+        button { padding: 10px 20px; background: #0084ff; color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        a { text-decoration: none; color: #555; }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 10px;">
+        <a href="{% url 'inbox' %}">← Back to Inbox</a> | 
+        <a href="{% url 'profile' other_user.username %}">View @{{ other_user.username }}'s Profile</a>
+    </div>
+
+    <h2>Chat with @{{ other_user.username }}</h2>
+
+    <div class="chat-container" id="chatbox">
+        {% for msg in messages %}
+            <div class="message {% if msg.sender == request.user %}sent{% else %}received{% endif %}">
+                {{ msg.content }}
+                <span class="date">{{ msg.timestamp|date:"H:i" }}</span>
+            </div>
+        {% empty %}
+            <p style="text-align: center; color: #888; margin-top: 50px;">No messages yet. Say hello! 👋</p>
+        {% endfor %}
+    </div>
+
+   <form method="POST" onsubmit="clearInput()">
+        {% csrf_token %}
+        <input type="text" id="msgInput" name="content" placeholder="Type a message..." autocomplete="off" required autofocus>
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        var chatbox = document.getElementById("chatbox");
+        chatbox.scrollTop = chatbox.scrollHeight;
+
+        function clearInput() {
+            setTimeout(function() {
+                document.getElementById("msgInput").value = "";
+            }, 10);
+        }
+    </script>
+</body>
+</html>
+</body>
+</html>
