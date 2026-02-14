@@ -1,9 +1,7 @@
 # Social Media Platform 📱
 ### CodeAlpha Full Stack Internship Project
 
-**Author:** Swapnil Kharabe  
-**Domain:** Full Stack Web Development  
-**Duration:** January 2026 - February 2026
+
 
 ## 🚀 Features
 This is a fully functional social media application built with Django.
