@@ -2,7 +2,7 @@
 ### CodeAlpha Full Stack Internship Project
 
 
-
+ 
 ## 🚀 Features
 This is a fully functional social media application built with Django.
 * **User Authentication:** Secure Login, Registration, and Logout.
